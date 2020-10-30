@@ -27,4 +27,6 @@ Route::get('/admin', 'Admin\AdminController@index');
 Route::group(['middleware' => ['role:admin'], 'as' => 'admin.'], function() {
     Route::get('/settings', 'Admin\SettingController@index')->name('settings');
     Route::put('/settings', 'Admin\SettingController@update')->name('settings.update');
+
+    Route::get('/users', 'Admin\UserController@index')->name('users');
 });

@@ -25,7 +25,7 @@
 
           <li class="menu-header">Pengaturan</li>
           <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Kelola Meja</span></a></li>
-          <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Pengaturan User</span></a></li>
+          <li class="{{ __active('UserController', 'index') }}"><a class="nav-link" href="{{ route('admin.users') }}"><i class="fas fa-users"></i> <span>Pengaturan User</span></a></li>
           <li class="{{ __active('SettingController', 'index') }}"><a class="nav-link" href="{{ route('admin.settings') }}"><i class="fas fa-cog"></i> <span>Pengaturan Situs</span></a></li>
           @endrole
           @role('cashier')

@@ -46,6 +46,38 @@
   <script src="{{ asset('assets/themes/stisla/js/stisla.js') }}"></script>
   <script src="{{ asset('assets/themes/stisla/js/scripts.js') }}"></script>
 
+  <script>
+    let logOutBtn = document.querySelector('.logout-btn');
+    logOutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      fetch('{{ route('auth.logout') }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+ localStorage.getItem('accessToken')
+        },
+        body: JSON.stringify({
+          _token: '{{ csrf_token() }}'
+        })
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('accessTokenType');
+            localStorage.removeItem('accessTokenExpire');
+
+            window.location = '{{ route('auth.login') }}';
+          }
+        })
+        .catch(errors => {
+          console.log(errors)
+        })
+      
+    })
+  </script>
+
   @stack('custom_js')
 </body>
 </html>

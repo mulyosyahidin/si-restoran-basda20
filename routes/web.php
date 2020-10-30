@@ -19,7 +19,9 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 Route::post('/login', 'Api\AuthController@login')->name('auth.login');
-//Route::post('/logout', 'Api\AuthController@logout')->name('logout');
+Route::group(['middleware' => ['auth:web', 'auth:api']], function () {
+    Route::post('/logout', 'Api\AuthController@logout')->name('auth.logout');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', 'Admin\AdminController@index');

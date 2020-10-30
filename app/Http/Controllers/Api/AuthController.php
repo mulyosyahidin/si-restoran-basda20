@@ -35,7 +35,7 @@ class AuthController extends Controller
                 ], 401);
         }
 
-        $user = Auth::user();
+        $user = auth()->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
 
@@ -55,9 +55,11 @@ class AuthController extends Controller
             ]);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        $request->user()->token()->revoke();
+        auth()->user()->token()->revoke();
+        auth('web')->logout();
+
         return response()->json([
             'success' => true,
             'message' => 'Berhasil logout'

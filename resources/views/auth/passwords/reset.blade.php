@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
 
-    <title>Reset Password &mdash; Stisla</title>
+    <title>Reset Password &mdash; {{ getSiteName() }}</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <div class="simple-footer">
-                            Copyright &copy; Stisla 2018
+                            Copyright &copy; {{ getSiteName() }}
                         </div>
                     </div>
                 </div>

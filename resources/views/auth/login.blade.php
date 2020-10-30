@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Login &mdash; Stisla</title>
+
+    <title>Login &mdash; {{ getSiteName() }}</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -27,7 +28,7 @@
                         <img src="{{ asset('assets/themes/stisla/img/stisla-fill.svg') }}" alt="logo" width="80"
                             class="shadow-light rounded-circle mb-5 mt-2">
                         <h4 class="text-dark font-weight-normal">Selamat Datang <span
-                                class="font-weight-bold">Stisla</span></h4>
+                                class="font-weight-bold">{{ getSiteName() }}</span></h4>
                         <p class="text-info-container">
                             Untuk melanjutkan, silahkan login menggunakan email dan password Anda.
                         </p>
@@ -74,7 +75,7 @@
                         </form>
 
                         <div class="text-center text-small mt-5">
-                            Sistem Informasi Restoran &bull; Informatika UNIB 2019
+                            Sistem Informasi {{ getSiteName() }} &bull; Informatika UNIB 2019
                         </div>
                     </div>
                 </div>
@@ -120,8 +121,7 @@
                 loginBtn.innerHTML = '<i class="fa fa-spin fa-spinner"></i> Login...';
                 loginBtn.setAttribute('disabled', 'disabled');
 
-                fetch('{{ route('
-                        auth.login ') }}', {
+                fetch('{{ route('auth.login') }}', {
                             method: 'POST',
                             body: loginData
                         })
@@ -172,8 +172,7 @@
                             txtInfo.classList.add('alert-success');
 
                             setTimeout(() => {
-                                window.location = '{{ route('
-                                home ') }}';
+                                window.location = '{{ route('home') }}';
                             }, 5000);
                         }
                     })

@@ -11,7 +11,8 @@ Anggota kelompok 7
 Pada sistem ini terdiri dari 3 aktor (role), yaitu:
 1. Admin (Superuser, pemilik restoran)
 2. Kasir
-3. Dapur
+3. Waiter (Pemesanan)
+4. Dapur
 
 Sistem ini dirancang untuk restoran yang bersifat *dine in* (makan ditempat). Untuk pembayaran hanya bisa melalui tunai.
 
@@ -24,7 +25,9 @@ Pada sistem ini, setiap aktor memiliki peran yang berbeda, yaitu:
    - Melihat data order
    - Mengelola data meja
 2. Kasir
-   - Mengelola order
    - Mengelola pembayaran
-3. Dapur
+3. Waiter
+   - Mengelola order
+4. Dapur
    - Melihat data order
+   - Mengelola stok makanan

@@ -8,12 +8,12 @@
         </form>
         <ul class="navbar-nav navbar-right">
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-            <img alt="image" src="../assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+            <img alt="image" src="{{ getProfilePicture() }}" class="rounded-circle mr-1">
             <div class="d-sm-none d-lg-inline-block">{{ request()->user()->name }}</div></a>
             <div class="dropdown-menu dropdown-menu-right">
-              <div class="dropdown-title">Logged in 5 min ago</div>
-              <a href="features-profile.html" class="dropdown-item has-icon">
-                <i class="far fa-user"></i> Profile
+              <div class="dropdown-title">Halo!</div>
+              <a href="{{ route('profile') }}" class="dropdown-item has-icon">
+                <i class="far fa-user"></i> Profil
               </a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item has-icon text-danger logout-btn">

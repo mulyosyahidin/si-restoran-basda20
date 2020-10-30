@@ -124,3 +124,15 @@ if ( ! function_exists('createAcronym'))
         return $acronym;
     }
 }
+
+if ( ! function_exists('getProfilePicture'))
+{
+    function getProfilePicture()
+    {
+        if (isset(auth()->user()->media[0])) {
+            return auth()->user()->media[0]->getFullUrl();
+        }
+
+        return asset('assets/themes/stisla/img/avatar/avatar-1.png');
+    }
+}

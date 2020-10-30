@@ -463,6 +463,10 @@
                         deleteContainer.innerHTML = res.message;
 
                         deleteBtn.innerHTML = '<i class="fa fa-check"></i> Berhasil!';
+
+                        setTimeout(() => {
+                            $('#deleteModal').modal('hide')
+                        }, 2500);
                     }
                 })
                 .catch(errors => {

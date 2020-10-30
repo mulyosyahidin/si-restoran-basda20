@@ -33,7 +33,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="name">Nama Situs:</label>
-                                    <input type="text" class="form-control @error('site_name') is-invalid @enderror" id="name" name="site_name" value="{{ getSiteName() }}" required>
+                                    <input type="text" class="form-control @error('site_name') is-invalid @enderror" id="name" name="site_name" value="{{ old('site_name', getSiteName()) }}" required>
 
                                     @error('site_name')
                                         <div class="invalid-feedback">
@@ -55,7 +55,7 @@
 
                                 <div class="form-group">
                                     <label for="site_desc">Deskripsi:</label>
-                                    <textarea name="site_description" id="site_desc" cols="30" rows="10" class="form-control @error('site_description') is-invalid @enderror">{{ getSetting('siteDescription') }}</textarea>
+                                    <textarea name="site_description" id="site_desc" cols="30" rows="10" class="form-control @error('site_description') is-invalid @enderror">{{ old('site_description', getSetting('siteDescription')) }}</textarea>
                                 
                                     @error('site_description')
                                     <div class="invalid-feedback">
@@ -85,7 +85,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="email">Email:</label>
-                                    <input type="email" name="email" value="{{ getSetting('siteEmail') }}" id="email" class="form-control @error('email') is-invalid @enderror">
+                                    <input type="email" name="email" value="{{ old('email', getSetting('siteEmail')) }}" id="email" class="form-control @error('email') is-invalid @enderror">
 
                                     @error('email')
                                         <div class="invalid-feedback">
@@ -96,7 +96,7 @@
 
                                 <div class="form-group">
                                     <label for="tel">HP:</label>
-                                    <input type="text" name="phone_number" value="{{ getSetting('sitePhoneNumber') }}" id="tel" class="form-control @error('phone_number') is-invalid @enderror">
+                                    <input type="text" name="phone_number" value="{{ old('phone_number', getSetting('sitePhoneNumber')) }}" id="tel" class="form-control @error('phone_number') is-invalid @enderror">
 
                                     @error('phone_number')
                                         <div class="invalid-feedback">
@@ -107,7 +107,7 @@
 
                                 <div class="form-group">
                                     <label for="address">Alamat:</label>
-                                    <textarea name="address" id="address" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror">{{ getSetting('siteAddress') }}</textarea>
+                                    <textarea name="address" id="address" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror">{{ old('address', getSetting('siteAddress')) }}</textarea>
 
                                     @error('address')
                                         <div class="invalid-feedback">

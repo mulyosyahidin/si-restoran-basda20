@@ -484,7 +484,6 @@
 
             submitBtn.innerHTML = 'Hapus';
             submitBtn.removeAttribute('disabled')
-
         });
     </script>
 @endpush

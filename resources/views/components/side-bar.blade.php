@@ -24,7 +24,13 @@
           <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Pembayaran</span></a></li>
 
           <li class="menu-header">Pengaturan</li>
-          <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Kelola Meja</span></a></li>
+          <li class="nav-item dropdown {{ __active('TableController', ['index', 'create', 'show']) }}">
+            <a href="#" class="nav-link has-dropdown"><i class="fas fa-chair"></i><span>Meja</span></a>
+            <ul class="dropdown-menu">
+              <li class=" {{ __active('TableController', ['index', 'show']) }}"><a class="nav-link" href="{{ route('admin.tables.index') }}">Kelola Meja</a></li>
+              <li class=" {{ __active('TableController', 'create') }}"><a class="nav-link" href="{{ route('admin.tables.create') }}">Tambah Meja</a></li>
+            </ul>
+          </li>
           <li class="{{ __active('UserController', 'index') }}"><a class="nav-link" href="{{ route('admin.users') }}"><i class="fas fa-users"></i> <span>Pengaturan User</span></a></li>
           <li class="{{ __active('SettingController', 'index') }}"><a class="nav-link" href="{{ route('admin.settings') }}"><i class="fas fa-cog"></i> <span>Pengaturan Situs</span></a></li>
           @endrole

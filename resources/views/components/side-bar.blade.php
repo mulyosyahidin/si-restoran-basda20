@@ -15,7 +15,7 @@
           @role('admin')
           <li class="menu-header">Makanan</li>
           <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Kelola Makanan</span></a></li>
-          <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Kelola Kategori</span></a></li>
+          <li class=" {{ __active('CategoryController', 'index') }}"><a class="nav-link" href="{{ route('admin.categories') }}"><i class="fas fa-list"></i> <span>Kelola Kategori</span></a></li>
 
           <li class="menu-header">Pesanan</li>
           <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Kelola Pesanan</span></a></li>

@@ -31,7 +31,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/settings', 'Admin\SettingController@update')->name('settings.update');
     
         Route::get('/users', 'Admin\UserController@index')->name('users');
-        Route::resource('/tables', 'Admin\TableController');
+        Route::resource('/tables', 'Admin\TableController')->only(['index', 'show', 'destroy', 'create']);
+        Route::get('/categories', 'Admin\CategoryController@index')->name('categories');
     });
     
     Route::get('/profile', 'ProfileController@index')->name('profile');

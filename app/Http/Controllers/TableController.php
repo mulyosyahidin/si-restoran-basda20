@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Table;
@@ -17,7 +17,7 @@ class TableController extends Controller
     {
         $tables = Table::paginate(20);
 
-        return view('admin.tables', compact('tables'));
+        return view('tables.index', compact('tables'));
     }
 
     /**
@@ -27,7 +27,7 @@ class TableController extends Controller
      */
     public function create()
     {
-        return view('admin.tables-create');
+        return view('tables.create');
     }
 
     /**
@@ -69,7 +69,7 @@ class TableController extends Controller
      */
     public function show(Table $table)
     {
-        return view('admin.tables-show', compact('table'));
+        return view('tables.show', compact('table'));
     }
 
     /**

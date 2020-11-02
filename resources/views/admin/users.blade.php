@@ -99,10 +99,9 @@
                 <div class="form-group">
                     <label for="role">Role:</label>
                     <select name="role" id="role" class="form-control">
-                        <option value="admin">Admin</option>
-                        <option value="cashier">Kasir</option>
-                        <option value="waiter">Waiter</option>
-                        <option value="kitchen">Dapur</option>
+                        @foreach ($roles as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -157,10 +156,9 @@
                 <div class="form-group">
                     <label for="role">Role:</label>
                     <select name="role" id="role" class="form-control role-input">
-                        <option value="admin">Admin</option>
-                        <option value="cashier">Kasir</option>
-                        <option value="waiter">Waiter</option>
-                        <option value="kitchen">Dapur</option>
+                        @foreach ($roles as $item)
+                            <option class="role-{{ $item->id }}" value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
                     </select>
 
                     <div class="invalid-feedback role-feedback"></div>
@@ -356,7 +354,7 @@
                         .value = res.email;
                     editUserForm.querySelector('.password-input')
                         .value = '';
-                    editUserForm.querySelector(`[value="${res.roles[0].name}"]`)
+                    editUserForm.querySelector(`.role-${res.roles[0].id}`)
                         .setAttribute('selected', 'selected');
 
 

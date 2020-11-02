@@ -14,7 +14,14 @@
 
           @role('admin')
           <li class="menu-header">Makanan</li>
-          <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Kelola Makanan</span></a></li>
+          <li class="nav-item dropdown {{ __active('FoodController', ['index', 'edit', 'create', 'show', 'stock']) }}">
+            <a href="#" class="nav-link has-dropdown"><i class="fas fa-hamburger"></i><span>Kelola Makanan</span></a>
+            <ul class="dropdown-menu">
+              <li class=" {{ __active('FoodController', ['index', 'edit', 'show']) }}"><a class="nav-link" href="{{ route('admin.foods.index') }}">Kelola Makanan</a></li>
+              <li class=" {{ __active('FoodController', 'create') }}"><a class="nav-link" href="{{ route('admin.foods.create') }}">Tambah Makanan</a></li>
+              <li class=" {{ __active('FoodController', 'stock') }}"><a class="nav-link" href="{{ route('admin.foods.stock') }}">Kelola Stok</a></li>
+            </ul>
+          </li>
           <li class=" {{ __active('CategoryController', 'index') }}"><a class="nav-link" href="{{ route('admin.categories') }}"><i class="fas fa-list"></i> <span>Kelola Kategori</span></a></li>
 
           <li class="menu-header">Pesanan</li>

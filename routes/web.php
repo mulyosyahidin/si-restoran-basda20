@@ -27,12 +27,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['role:admin'], 'as' => 'admin.'], function() {
-        Route::get('/settings', 'Admin\SettingController@index')->name('settings');
-        Route::put('/settings', 'Admin\SettingController@update')->name('settings.update');
+        Route::get('/settings', 'SettingController@index')->name('settings');
+        Route::put('/settings', 'SettingController@update')->name('settings.update');
     
-        Route::get('/users', 'Admin\UserController@index')->name('users');
-        Route::resource('/tables', 'Admin\TableController')->only(['index', 'show', 'destroy', 'create']);
-        Route::get('/categories', 'Admin\CategoryController@index')->name('categories');
+        Route::get('/users', 'UserController@index')->name('users');
+        Route::resource('/tables', 'TableController')->only(['index', 'show', 'destroy', 'create', 'store']);
+        Route::get('/categories', 'CategoryController@index')->name('categories');
+
+        Route::get('/foods/stock', 'FoodController@stock')->name('foods.stock');
+        Route::resource('/foods', 'FoodController');
     });
     
     Route::get('/profile', 'ProfileController@index')->name('profile');

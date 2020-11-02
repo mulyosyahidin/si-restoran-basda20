@@ -19,5 +19,8 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::apiResource('users', 'Api\UserController');
         Route::apiResource('tables', 'Api\TableController');
         Route::apiResource('categories', 'Api\CategoryController');
+
+        Route::put('foods/stock', 'Api\FoodController@stock')->name('foods.stock');
+        Route::apiResource('foods', 'Api\FoodController')->only(['update']);
     });
 });

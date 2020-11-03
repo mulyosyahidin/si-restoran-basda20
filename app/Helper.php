@@ -136,3 +136,19 @@ if ( ! function_exists('getProfilePicture'))
         return asset('assets/themes/stisla/img/avatar/avatar-1.png');
     }
 }
+
+if ( ! function_exists('createOrderNumber'))
+{
+    function createOrderNumber($waiter_id, $customerName, $totalItem, $tableID)
+    {
+        $number = '';
+        $random = bin2hex(random_bytes(3));
+        
+        //ORD|TANGGAL|BULAN|TAHUN|WAITER ID|CUSTOMER_ACR|TOTAL_ITEM|TABLE_ID
+
+        $number = $random.$waiter_id.createAcronym($customerName).$totalItem.$tableID;
+
+        return strtoupper($number);
+
+    }
+}

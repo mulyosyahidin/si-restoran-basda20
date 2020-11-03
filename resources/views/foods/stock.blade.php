@@ -3,6 +3,7 @@
 
 @section('custom_head')
     <link rel="stylesheet" href="{{ asset('assets/plugins/toastify-js/src/toastify.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
 @endsection
 
 @section('content')
@@ -33,7 +34,7 @@
                         </div>
                         <div class="table-responsive">
                             <form action="#" method="post" id="stock-form">
-                                <table class="table table-bordered table-striped table-hover">
+                                <table class="table table-bordered table-striped table-hover" id="stock-table">
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">ID</th>
@@ -83,8 +84,13 @@
 
 @push('custom_js')
     <script src="{{ asset('assets/plugins/toastify-js/src/toastify.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+
     <script>
         let bearerToken = localStorage.getItem('accessToken');
+        $('#stock-table').dataTable();
+        
         let saveBtn = document.querySelectorAll('.save-btn');
         saveBtn.forEach((btn) => {
             btn.addEventListener('click', (e) => {

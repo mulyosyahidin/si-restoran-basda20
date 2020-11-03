@@ -26,12 +26,14 @@
       @yield('content')
 
       <footer class="main-footer">
+        @section('footer')
         <div class="footer-left">
           &copy; 2020 {{ getSiteName() }}
         </div>
         <div class="footer-right">
           1.0.0
         </div>
+        @show
       </footer>
     </div>
   </div>

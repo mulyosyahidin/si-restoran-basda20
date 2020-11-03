@@ -38,7 +38,7 @@ class FoodController extends Controller
      */
     public function show(Food $food)
     {
-        //
+        return $food;
     }
 
     /**

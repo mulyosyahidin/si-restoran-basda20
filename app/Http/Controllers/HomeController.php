@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Food;
 use App\Models\Table;
+use App\Models\Used_table;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -27,7 +28,13 @@ class HomeController extends Controller
     {
         $foods = Food::all();
         $tables = Table::all();
+        $used_tables_get = Used_table::all();
+        $used_tables = [];
 
-        return view('home', compact('foods', 'tables'));
+        foreach ($used_tables_get as $table) {
+            $used_tables[] = $table->table_id;
+        }
+
+        return view('home', compact('foods', 'tables', 'used_tables'));
     }
 }

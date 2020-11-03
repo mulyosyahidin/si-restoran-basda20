@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/foods/stock', 'FoodController@stock')->name('foods.stock');
         Route::resource('/foods', 'FoodController');
     });
+
+    Route::get('/orders/print/{order}', 'OrderController@print')->name('orders.print');
+    Route::resource('/orders', 'OrderController');
     
     Route::get('/profile', 'ProfileController@index')->name('profile');
     Route::put('/profile', 'ProfileController@update')->name('profile.update');

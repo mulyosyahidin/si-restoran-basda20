@@ -103,7 +103,8 @@ class OrderController extends Controller
                 'success' => true,
                 'message' => 'Berhasil membuat order',
                 'order' => $order,
-                'table' => $order->table
+                'table' => $order->table,
+                'used_tables' => Used_table::all()
             ]);
     }
 
@@ -139,5 +140,19 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+    }
+
+    public function make_payment(Request $request, Order $order)
+    {
+        $order->status = 3;
+        $order->save();
+
+        Used_table::where('order_id', $order->id)->delete();
+
+        return response()
+            ->json([
+                'success' => true,
+                'message' => 'Berhasil melakukan pembayaran order'
+            ]);
     }
 }

@@ -14,13 +14,14 @@
         .foods .item:hover {
             cursor: grab
         }
-        .foods .item p {
+        .foods .item div {
             text-align: center;
+            margin-bottom: 7px;
         }
         .foods .item.selected {
             background: #6777EF
         }
-        .foods .item.selected p {
+        .foods .item.selected div {
             color: white;
         }
       
@@ -58,7 +59,17 @@
                                     <div class="col-2">
                                         <div class="item item-{{ $item->id }}" data-id="{{ $item->id }}">
                                             <img src="{{ $item->media[0]->getFullUrl() }}" alt="" class="img-fluid img-w30">
-                                            <p>{{ $item->name }}</p>
+                                            <div>{{ $item->name }}</div>
+                                            @if ($item->stock < 10)
+                                                <div class="text-center" style="position: absolute; top: 0; margin-top: 4px; margin-left: 4px">
+                                                    @if ($item->stock < 10 && $item->stock > 0)
+                                                        <span class="badge badge-info">Stok: {{ $item->stock }}</span>
+                                                    @endif
+                                                    @if ($item->stock == 0)
+                                                        <span class="badge badge-danger">Habis</span>
+                                                    @endif
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -93,7 +104,7 @@
                                 <label for="">Meja:</label>
                                 <select id="table-select" class="form-control">
                                     @foreach ($tables as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        <option @if (in_array($item->id, $used_tables)) disabled @endif value="{{ $item->id }}" class="table-{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -136,7 +147,7 @@
     <div class="card-footer text-right">
         <button type="button" class="btn btn-secondary float-left reset-btn">Reset</button>
         <button class="btn btn-primary" id="place-new-order">Buat Order <i class="fa fa-arrow-right"></i></button>
-        <button class="btn btn-info">Buat Order dan Bayar</button>
+        <button class="btn btn-info" id="place-new-order2">Buat Order dan Bayar</button>
     </div>
 </div>
 @endsection
@@ -220,9 +231,62 @@
         </div>
         <div class="modal-footer bg-whitesmoke br">
             <button type="button" class="btn btn-secondary mr-auto btn-close-cart-modal" data-dismiss="modal">Tutup</button>
-            <button type="button" class="btn btn-primary">Cetak Nota</button>
+            <a href="#" class="btn btn-primary btn-print" target="_blank">Cetak Nota</a>
           </div>
       </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="orderModal2">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><span class="order-title"></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="#" method="post" id="pay-form">
+            <div class="modal-body">
+                <div class="message-container"></div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered" id="order-data2">
+                        <tr>
+                            <td>Total Harga</td>
+                            <td><span class="total-price font-weight-bold"></span></td>
+                        </tr>
+                    </table>
+                </div>
+    
+                <div class="form-group">
+                    <label for="">Jumlah bayar:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control amount-input" name="amount" data-total-payment="" required>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label for="">Kembali:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control back-input" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-secondary mr-auto btn-close-cart-modal" data-dismiss="modal">Tutup</button>
+                
+                <a href="#" class="btn btn-primary btn-print" target="_blank">Cetak Nota</a>
+                <button type="submit" class="btn btn-primary pay-btn">Bayar dan Selesai</button>
+              </div>
+          </div>
+        </form>
     </div>
 </div>
 @endsection
@@ -264,6 +328,11 @@
             $('#order-summary .total-price').text('Rp 0,00');
 
             $('.foods .item').removeClass('selected');
+
+            $('.pay-btn').html('Bayar dan Selesai');
+            $('#pay-form .message-container').removeClass('alert alert-success').empty();
+            $('#pay-form .back-input, #pay-form .amount-input').val('');
+            $('#place-new-order2').html('Bayar dan Selesai');
         }
 
         let bearerToken = localStorage.getItem('accessToken');
@@ -278,6 +347,8 @@
         let __temp_item_id = 0;
         let __temp_item_price = 0;
         let __temp_order_max = 0;
+
+        var audio = new Audio('{{ asset('assets/uploads/beep-08b.mp3') }}');
 
         $('.foods .item').click(function () {
             let isSelected = $(this).hasClass('selected');
@@ -386,7 +457,6 @@
 
                     $(`.foods .item-${id}`).addClass('selected');
                     
-                    var audio = new Audio('{{ asset('assets/uploads/beep-08b.mp3') }}');
                     audio.play();
 
                     let newItem = $(`<tr id="item-${id}" />`);
@@ -599,6 +669,13 @@
                         $('.order-table', orderData).text(res.table.name);
                         $('.total-price', orderData).text(`Rp ${formatMoney(res.order.total_price)}`);
 
+                        $('.btn-print').attr('href', `{{ route('orders.print', false) }}/${res.order.id}`);
+
+                        let usedTables = res.used_tables;
+                        usedTables.forEach((table) => {
+                            $(`#table-select .table-${table.table_id}`).attr('disabled', 'disabled');
+                        })
+
                         orderModal.modal('show');
                     }
                 })
@@ -607,7 +684,88 @@
                 })
         });
 
-        $('#orderModal').on('hidden.bs.modal', function (e) {
+        let __temp_order_id = 0;
+
+        $('#place-new-order2').click(function (e) {
+            e.preventDefault();
+
+            let customerName = $('#customer-name');
+            let table = $('#table-select');
+            let type = $('#order-type');
+
+            if (customerName.val() == '') {
+                customerName.addClass('is-invalid');
+                return false;
+            }
+            customerName.removeClass('is-invalid');
+
+            if (__temp_order_data.length == 0) {
+                Toastify({
+                    text: 'Silahkan memilih item yang akan diorder',
+                    duration: 3000,
+                    gravity: 'top',
+                    position: 'right'
+                }).showToast();
+
+                return false;
+            }
+
+            $(this).html('<i class="fa fa-spin fa-spinner"></i> Membuat order...');
+
+            fetch(`{{ route('api.orders.store') }}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer '+ bearerToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    customer_name: customerName.val(),
+                    order_type: type.val(),
+                    table_id: table.val(),
+                    items: __temp_order_data
+                })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.error) {
+                        $(this).html('<i class="fa fa-arrow-right"></i> Buat Order');
+                        if (res.validations) {
+                            for (field in res.validations) {
+                                document.querySelector('.'+ field +'-input')
+                                    .classList.add('is-invalid')
+                                for(error in res.validations[field]) {
+                                    document.querySelector('.'+ field +'-feedback')
+                                        .innerHTML = res.validations[field][error]
+                                }
+                            }
+                        }
+                    }
+                    else if (res.success) {
+                        $(this).html('<i class="fa fa-check"></i> Berhasil!');
+
+                        __temp_order_id = res.order.id;
+
+                        let orderModal = $('#orderModal2');
+                        
+                        $('.order-title', orderModal).text(`Order #${res.order.order_number}`);
+                        let orderData = $('#order-data2');
+
+                        $('.order-number', orderData).text(`#${res.order.order_number}`);
+                        $('.order-table', orderData).text(res.table.name);
+                        $('.total-price', orderData).text(`Rp ${formatMoney(res.order.total_price)}`);
+
+                        $('.btn-print').attr('href', `{{ route('orders.print', false) }}/${res.order.id}`);
+                        $('.amount-input').data('total-payment', res.order.total_price);
+
+                        orderModal.modal('show');
+                    }
+                })
+                .catch(errors => {
+                    console.log(errors);
+                })
+        });
+
+        $('#orderModal, #orderModal2').on('hidden.bs.modal', function (e) {
             resetOrder();
         });
         $('.reset-btn').click(function (e) {
@@ -619,6 +777,52 @@
                 gravity: 'bottom',
                 position: 'left'
             }).showToast();
+        });
+
+        $('.amount-input').keyup(function (e) {
+            e.preventDefault();
+
+            let total = $(this).data('total-payment');
+            let amount = $(this).val();
+
+            let back = amount - total;
+            if (back > 0) {
+                $('.back-input').val(formatMoney(back))
+            }
+            else {
+                $('.back-input').val('0,00');
+            }
+        });
+
+        $('#pay-form').submit(function (e) {
+            e.preventDefault();
+
+            let payBtn = $('.pay-btn', $(this));
+            let container = $('.message-container', $(this));
+
+            payBtn.html('<i class="fa fa-spin fa-spinner"></i> Memproses pembayaran...');
+            payBtn.attr('disabled', 'disabled');
+
+            let amount = $('.amount-input', $(this)).val();
+            let orderId = __temp_order_id;
+
+            fetch(`{{ route('api.orders.payment', false) }}/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer '+ bearerToken
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        payBtn.html('<i class="fa fa-check"></i> Berhasil!');
+
+                        container.addClass('alert alert-success').text(res.message)
+                    }
+                })
+                .catch(errors => {
+                    container.html(errors);
+                })
         })
     </script>
 @endpush

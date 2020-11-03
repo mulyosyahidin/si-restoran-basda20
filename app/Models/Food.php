@@ -15,4 +15,9 @@ class Food extends Model implements HasMedia
     {
         return $this->belongsToMany('App\Models\Category');
     }
+
+    public function order_item()
+    {
+        return $this->belongsTo('App\Models\Order_item');
+    }
 }

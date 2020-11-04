@@ -13,6 +13,13 @@ use Pusher\Pusher;
 
 class OrderController extends Controller
 {
+    public $pusher;
+
+    public function __construct()
+    {
+        $this->pusher = new Pusher(env('PUSHER_APP_KEY'), env(('PUSHER_APP_SECRET')), env('PUSHER_APP_ID'), array('cluster' => env('PUSHER_APP_CLUSTER')));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -111,6 +118,7 @@ class OrderController extends Controller
         }
 
         $order->time = Carbon::parse($order->created_at)->format('H:i');
+        $order->time_update = Carbon::parse($order->updated_at)->format('H:i');
 
         $notify = array(
             'order' => $order,
@@ -118,8 +126,7 @@ class OrderController extends Controller
             'table' => $order->table
         );
 
-        $pusher = new Pusher(env('PUSHER_APP_KEY'), env(('PUSHER_APP_SECRET')), env('PUSHER_APP_ID'), array('cluster' => env('PUSHER_APP_CLUSTER')));
-        $pusher->trigger('restoran19', 'notifyKitchenNewOrder', $notify);
+        $this->pusher->trigger('restoran19', 'notifyKitchenNewOrder', $notify);
 
         return response()
             ->json([
@@ -168,16 +175,24 @@ class OrderController extends Controller
             case 'mark_as_ready':
                 $order->status = 2;
                 $order->save();
-                
-                $message = 'Order ditandai telah siap';
+
+                $order->update_time = Carbon::parse($order->updated_at)->format('H:i');
+
+                $orderCount['on_process'] = Order::where('status', 1)->count();
+                $orderCount['ready'] = Order::where('status', 2)->count();
+                $orderCount['order'] = $order;
+                $orderCount['table'] = $order->table;
+
+                $this->pusher->trigger('restoran19', 'updateWaiterOrderCount', $orderCount);
+
+                return response()
+                    ->json([
+                        'success' => true,
+                        'message' => 'Order ditandai telah siap',
+                        'orderCount' => $orderCount['on_process']
+            ]);
             break;
         }
-
-        return response()
-            ->json([
-                'success' => true,
-                'message' => $message
-            ]);
     }
 
     /**

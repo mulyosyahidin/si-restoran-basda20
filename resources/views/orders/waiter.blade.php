@@ -48,107 +48,223 @@
     <div class="main-content">
         <section class="section">
             <div class="row">
-                <div class="col-md-7">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Item</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row foods">
-                                @foreach ($foods as $item)
-                                    <div class="col-2">
-                                        <div class="item item-{{ $item->id }}" data-id="{{ $item->id }}">
-                                            <img src="{{ $item->media[0]->getFullUrl() }}" alt="" class="img-fluid img-w30">
-                                            <div>{{ $item->name }}</div>
-                                            @if ($item->stock < 10)
-                                                <div class="text-center" style="position: absolute; top: 0; margin-top: 4px; margin-left: 4px">
-                                                    @if ($item->stock < 10 && $item->stock > 0)
-                                                        <span class="badge badge-info">Stok: {{ $item->stock }}</span>
-                                                    @endif
-                                                    @if ($item->stock == 0)
-                                                        <span class="badge badge-danger">Habis</span>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="customer-name">Nama pelanggan:</label>
-                                        <input type="text" id="customer-name" class="form-control customer_name-input">
-
-                                        <div class="invalid-feedback customer_name-feedback">Nama pelanggan tidak boleh kosong</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="order-type">Order:</label>
-                                        <select id="order-type" class="form-control">
-                                            <option value="1">Makan ditempat</option>
-                                            <option value="2">Bawa pulang</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="table-select">Meja:</label>
-                                <select id="table-select" class="form-control">
-                                    @foreach ($tables as $item)
-                                        <option @if (in_array($item->id, $used_tables)) disabled @endif value="{{ $item->id }}" class="select-table table-{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="order-note">Catatan tambahan:</label>
-                                <textarea name="note" id="order-note" cols="30" rows="10" class="form-control"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body p-0">
-                            <table class="table table-striped table-bordered" id="items-table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Item</th>
-                                        <th scope="col">Harga</th>
-                                        <th scope="col">Jumlah</th>
-                                        <th scope="col">Subtotal</th>
-                                        <th scope="col">Hapus</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                                <tfoot id="order-summary">
-                                    <tr>
-                                        <td><strong>Total</strong></td>
-                                        <td colspan="2" class="text-right"><span class="total-item font-weight-bold">0</span></td>
-                                        <td><strong>Rp <span class="total-price">0,00</span></strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            <ul class="nav nav-pills nav-tabs order-choice">
+                                <li class="nav-item">
+                                    <a href="#new-order" data-toggle="tab" id="new-order-tab" class="nav-link active">Buat Order</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#on-process" data-toggle="tab" id="on-process-tab" class="nav-link">
+                                        Order Dalam Antrian
+                                        <span style="display: inline !important" class="badge badge-pill badge-warning on-process-order-count">{{ $orderCount['on_process'] }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#order-ready" data-toggle="tab" id="order-ready-tab" class="nav-link">
+                                        Order Siap
+                                        <span style="display: inline !important" class="badge badge-pill badge-success ready-order-count">{{ $orderCount['ready'] }}</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-
-           
+            
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="new-order">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Item</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row foods">
+                                        @foreach ($foods as $item)
+                                            <div class="col-2">
+                                                <div class="item item-{{ $item->id }}" data-id="{{ $item->id }}">
+                                                    <img src="{{ $item->media[0]->getFullUrl() }}" alt="" class="img-fluid img-w30">
+                                                    <div>{{ $item->name }}</div>
+                                                    @if ($item->stock < 10)
+                                                        <div class="text-center" style="position: absolute; top: 0; margin-top: 4px; margin-left: 4px">
+                                                            @if ($item->stock < 10 && $item->stock > 0)
+                                                                <span class="badge badge-info">Stok: {{ $item->stock }}</span>
+                                                            @endif
+                                                            @if ($item->stock == 0)
+                                                                <span class="badge badge-danger">Habis</span>
+                                                            @endif
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="customer-name">Nama pelanggan:</label>
+                                                <input type="text" id="customer-name" class="form-control customer_name-input">
+        
+                                                <div class="invalid-feedback customer_name-feedback">Nama pelanggan tidak boleh kosong</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="order-type">Order:</label>
+                                                <select id="order-type" class="form-control">
+                                                    <option value="1">Makan ditempat</option>
+                                                    <option value="2">Bawa pulang</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="table-select">Meja:</label>
+                                        <select id="table-select" class="form-control">
+                                            @foreach ($tables as $item)
+                                                <option @if (in_array($item->id, $used_tables)) disabled @endif value="{{ $item->id }}" class="select-table table-{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="order-note">Catatan tambahan:</label>
+                                        <textarea name="note" id="order-note" cols="30" rows="10" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <table class="table table-striped table-bordered" id="items-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Item</th>
+                                                <th scope="col">Harga</th>
+                                                <th scope="col">Jumlah</th>
+                                                <th scope="col">Subtotal</th>
+                                                <th scope="col">Hapus</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot id="order-summary">
+                                            <tr>
+                                                <td><strong>Total</strong></td>
+                                                <td colspan="2" class="text-right"><span class="total-item font-weight-bold">0</span></td>
+                                                <td><strong>Rp <span class="total-price">0,00</span></strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="on-process">
+                    <div class="row on-process-orders">
+                        @forelse ($orders as $item)
+                            <div class="col-3 on-process-order-{{ $item->id }}">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-sm">
+                                            <tr class="bg-warning text-white">
+                                                <td>No. Order</td>
+                                                <td><strong><a class="text-white font-weight-bold" href="{{ route('orders.show', $item->id) }}" target="_blank">#{{ $item->order_number }}</a></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pelanggan</td>
+                                                <td><strong>{{ $item->customer_name }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meja</td>
+                                                <td><strong>
+                                                    @if (isset($item->table->name))
+                                                        {{ $item->table->name }}
+                                                    @else
+                                                        Bawa Pulang
+                                                    @endif
+                                                </strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Waktu</td>
+                                                <td><span class="badge badge-pill badge-warning">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="alert alert-info">Tidak ada order dalam antrian</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+                <div class="tab-pane" id="order-ready">
+                    <div class="row ready-orders">
+                        @forelse ($readyOrders as $item)
+                            <div class="col-3 ready-order-{{ $item->id }}">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-sm">
+                                            <tr class="bg-success text-white">
+                                                <td>No. Order</td>
+                                                <td><strong><a class="text-white font-weight-bold" href="{{ route('orders.show', $item->id) }}" target="_blank">#{{ $item->order_number }}</a></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pelanggan</td>
+                                                <td><strong>{{ $item->customer_name }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meja</td>
+                                                <td><strong>
+                                                    @if (isset($item->table->name))
+                                                        {{ $item->table->name }}
+                                                    @else
+                                                        Bawa Pulang
+                                                    @endif
+                                                </strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Waktu</td>
+                                                <td><span class="badge badge-pill badge-success">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="alert alert-info">Tidak ada order dalam antrian</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 @endsection
 
 @section('footer')
-<div class="card">
+<div class="card order-btn-container">
     <div class="card-footer text-right">
         <button type="button" class="btn btn-secondary float-left reset-btn">Reset</button>
         <button class="btn btn-primary" id="place-new-order">Buat Order <i class="fa fa-arrow-right"></i></button>
@@ -300,6 +416,7 @@
     <script src="{{ asset('assets/plugins/toastify-js/src/toastify.js') }}"></script>
     <script src="{{ asset('assets/plugins/accounting.js/accounting.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/select2/dist/js/select2.min.js') }}"></script>
+    <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
 
     <script>
         function formatMoney(money) {
@@ -681,7 +798,12 @@
                         let orderData = $('#order-data');
 
                         $('.order-number', orderData).text(`#${res.order.order_number}`);
-                        $('.order-table', orderData).text(res.table.name);
+                        if (res.table != null) {
+                            $('.order-table', orderData).text(res.table.name);
+                        }
+                        else {
+                            $('.order-table', orderData).text('Bawa pulang');
+                        }
                         $('.total-price', orderData).text(`Rp ${formatMoney(res.order.total_price)}`);
 
                         $('.btn-print').attr('href', `{{ route('orders.print', false) }}/${res.order.id}`);
@@ -694,6 +816,47 @@
                         })
 
                         orderModal.modal('show');
+
+                        let processOrderCount = +$('.on-process-order-count').text();
+                        processOrderCount += 1;
+                        $('.on-process-order-count').text(processOrderCount);
+
+                        let newItem = `<div class="col-3 on-process-order-${res.order.id}">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-sm">
+                                            <tr class="bg-warning text-white">
+                                                <td>No. Order</td>
+                                                <td><strong><a href="{{ route('orders.show', false) }}/${res.order.id}" target="_blank">#${res.order.order_number}</a></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pelanggan</td>
+                                                <td><strong>${res.order.customer_name}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meja</td>
+                                                <td><strong>
+                        `;
+                        if (res.table.name != null) {
+                            newItem += res.table.name;
+                        }
+                        else {
+                            newItem += 'Bawa pulang';
+                        }
+
+                        newItem += `</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Waktu</td>
+                                                <td><span class="badge badge-pill badge-warning">${res.order.time}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('.on-process-orders').append(newItem);
                     }
                 })
                 .catch(errors => {
@@ -773,12 +936,56 @@
                         if (res.table != null) {
                             $('.order-table', orderData).text(res.table.name);
                         }
+                        else {
+                            $('.order-table', orderData).text('Bawa pulang');
+                        }
                         $('.total-price', orderData).text(`Rp ${formatMoney(res.order.total_price)}`);
 
                         $('.btn-print').attr('href', `{{ route('orders.print', false) }}/${res.order.id}`);
                         $('.amount-input').data('total-payment', res.order.total_price);
 
                         orderModal.modal('show');
+
+                        let processOrderCount = +$('.on-process-order-count').text();
+                        processOrderCount += 1;
+                        $('.on-process-order-count').text(processOrderCount);
+
+                        let newItem = `<div class="col-3 on-process-order-${res.order.id}">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-sm">
+                                            <tr class="bg-warning text-white">
+                                                <td>No. Order</td>
+                                                <td><strong><a href="{{ route('orders.show', false) }}/${res.order.id}" target="_blank">#${res.order.order_number}</a></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pelanggan</td>
+                                                <td><strong>${res.order.customer_name}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meja</td>
+                                                <td><strong>
+                        `;
+                        if (res.table.name != null) {
+                            newItem += res.table.name;
+                        }
+                        else {
+                            newItem += 'Bawa pulang';
+                        }
+
+                        newItem += `</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Waktu</td>
+                                                <td><span class="badge badge-pill badge-warning">${res.order.time}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('.on-process-orders').append(newItem);
                     }
                 })
                 .catch(errors => {
@@ -789,6 +996,7 @@
         $('#orderModal, #orderModal2').on('hidden.bs.modal', function (e) {
             resetOrder();
         });
+
         $('.reset-btn').click(function (e) {
             resetOrder();
 
@@ -844,6 +1052,93 @@
                 .catch(errors => {
                     container.html(errors);
                 })
-        })
+        });
+
+        $('.order-choice .nav-link').click(function (e) {
+            e.preventDefault();
+
+            let directionTab = $(this).attr('id');
+            if (directionTab == 'new-order-tab') {
+                $('.order-btn-container').show();
+            }
+            else {
+                $('.order-btn-container').hide();
+            }
+        });
+
+        let passportAccessToken = localStorage.getItem('accessToken');
+        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            encrypted: true,
+            cluster: 'ap1'
+        });
+      
+        var channel = pusher.subscribe('restoran19');
+        channel.bind('updateWaiterOrderCount', function(data) {
+            let onProcess = data.on_process;
+            let ready = data.ready;
+
+            document.querySelector('.on-process-order-count').innerHTML = onProcess;
+            document.querySelector('.ready-order-count').innerHTML = ready;
+
+            Toastify({
+                text: `Order #${data.order.order_number} telah selesai dari dapur`,
+                duration: 5000,
+                gravity: 'top',
+                position: 'left'
+            }).showToast();
+
+            let orderReady = `<div class="card-body">
+                <div class="text-center">
+                    <i class="fa fa-check fa-3x"></i>
+                    <br>
+                    Order Siap!
+                </div>
+            </div>`;
+
+            $(`.on-process-orders .on-process-order-${data.order.id} .card`).addClass('bg-success').empty().append(orderReady);
+
+            setTimeout(() => {
+                $(`.on-process-orders .on-process-order-${data.order.id}`).fadeOut('slow');
+            }, 5000);
+
+            let newItem = `<div class="col-3 ready-order-${data.order.id}">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-sm">
+                                            <tr class="bg-success text-white">
+                                                <td>No. Order</td>
+                                                <td><strong><a class="text-white font-weight-bold" href="{{ route('orders.show', false) }}/${data.order.id}" target="_blank">#${data.order.order_number}</a></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pelanggan</td>
+                                                <td><strong>${data.order.customer_name}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Meja</td>
+                                            <td><strong>
+            `;
+
+            if (data.table != null) {
+                newItem += data.table.name;
+            }
+            else {
+                newItem += 'Bawa pulang';
+            }
+
+            newItem += `</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Waktu</td>
+                                                <td><span class="badge badge-pill badge-success">${data.order.update_time}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+            `;
+                        
+            $('.ready-orders').append(newItem);
+        });
+
     </script>
 @endpush

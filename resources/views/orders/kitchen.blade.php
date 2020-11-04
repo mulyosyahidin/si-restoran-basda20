@@ -145,14 +145,18 @@
     var channel = pusher.subscribe('restoran19');
     channel.bind('notifyKitchenNewOrder', function(data) {
         let defaultRow = document.querySelector('.default-row');
+        let blankContainer = document.querySelector('.blank-order-container');
+
         if (defaultRow != null) {
             defaultRow.remove();
         }
 
+        if (blankContainer != null) {
+            blankContainer.remove();
+        }
+
         let order = data.order;
         let table = data.table;
-
-        console.log(data)
 
         var audio = new Audio('{{ asset('assets/uploads/beep2.mp3') }}');
         audio.play();
@@ -276,6 +280,18 @@
                     setTimeout(() => {
                         $('#markAsReadyModal').modal('hide');
                     }, 2500);
+
+                    if (res.orderCount == 0) {
+                        let blankOrder = `<div class="col-12 blank-order-container">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="alert alert-info">Tidak ada yang sedang menunggu antrian.</div>
+                                </div>
+                            </div>
+                        </div>`;
+                        document.querySelector('.orders-list')
+                            .innerHTML = blankOrder;
+                    }
                 }
             })
             .catch(errors => {

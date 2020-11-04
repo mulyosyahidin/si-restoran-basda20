@@ -36,8 +36,12 @@ class HomeController extends Controller
             $used_tables[] = $table->table_id;
         }
 
-        $orders = Order::all();
+        $orders = Order::where('status', 1)->get();
+        $readyOrders = Order::where('status', 2)->get();
 
-        return view('home', compact('foods', 'orders', 'tables', 'used_tables'));
+        $orderCount['on_process'] = Order::where('status', 1)->count();
+        $orderCount['ready'] = Order::where('status', 2)->count();
+
+        return view('home', compact('foods', 'orderCount', 'orders', 'readyOrders', 'tables', 'used_tables'));
     }
 }

@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Food;
 use App\Models\Order;
-use App\Models\Table;
 use App\Models\Used_table;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Pusher\Pusher;
 
 class OrderController extends Controller
 {
@@ -33,7 +34,8 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'customer_name' => ['required', 'min:4', 'max:255'],
             'order_type' => ['required', 'numeric'],
-            'table_id' => ['nullable', 'numeric']
+            'table_id' => ['nullable', 'numeric'],
+            'note' => ['nullable', 'max:1024']
         ]);
 
         if ($validator->fails()) {
@@ -71,6 +73,7 @@ class OrderController extends Controller
         $order->table_id = $request->table_id;
         $order->total_item = $totalItem;
         $order->total_price = $totalPrice;
+        $order->note = $request->note;
         $order->save();
 
         $used_table = new Used_table();
@@ -97,7 +100,27 @@ class OrderController extends Controller
                 ]);
             }
         }
-      
+
+        $orderItems = [];
+        $n = 0;
+        foreach ($order->items as $food) {
+            $orderItems[$n]['name'] = $food->food->name;
+            $orderItems[$n]['qty'] = $food->item_qty;
+
+            $n++;
+        }
+
+        $order->time = Carbon::parse($order->created_at)->format('H:i');
+
+        $notify = array(
+            'order' => $order,
+            'items' => $orderItems,
+            'table' => $order->table
+        );
+
+        $pusher = new Pusher(env('PUSHER_APP_KEY'), env(('PUSHER_APP_SECRET')), env('PUSHER_APP_ID'), array('cluster' => env('PUSHER_APP_CLUSTER')));
+        $pusher->trigger('restoran19', 'notifyKitchenNewOrder', $notify);
+
         return response()
             ->json([
                 'success' => true,
@@ -128,7 +151,33 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'section' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return response()
+                ->json([
+                    'error' => true,
+                    'validations' => $validator->errors()
+                ]);
+        }
+
+        $section = $request->section;
+        switch ($section) {
+            case 'mark_as_ready':
+                $order->status = 2;
+                $order->save();
+                
+                $message = 'Order ditandai telah siap';
+            break;
+        }
+
+        return response()
+            ->json([
+                'success' => true,
+                'message' => $message
+            ]);
     }
 
     /**

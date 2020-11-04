@@ -14,7 +14,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::paginate();
+        $title = 'Semua Order';
+
+        return view('orders.index', compact('orders', 'title'));
     }
 
     /**
@@ -46,7 +49,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return view('orders.show', compact('order'));
     }
 
     /**
@@ -86,5 +89,29 @@ class OrderController extends Controller
     public function print(Order $order)
     {
         return view('orders.print', compact('order'));
+    }
+
+    public function queue()
+    {
+        $orders = Order::where('status', 1)->paginate();
+        $title = 'Order Dalam Antrian Dapur';
+
+        return view('orders.index', compact('orders', 'title'));
+    }
+
+    public function ready()
+    {
+        $orders = Order::where('status', 2)->paginate();
+        $title = 'Order Disajikan';
+
+        return view('orders.index', compact('orders', 'title'));
+    }
+
+    public function finish()
+    {
+        $orders = Order::where('status', 3)->paginate();
+        $title = 'Order Selesai';
+
+        return view('orders.index', compact('orders', 'title'));
     }
 }

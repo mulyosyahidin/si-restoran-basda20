@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Models\Order;
 use App\Models\Table;
 use App\Models\Used_table;
 use Illuminate\Http\Request;
@@ -35,6 +36,8 @@ class HomeController extends Controller
             $used_tables[] = $table->table_id;
         }
 
-        return view('home', compact('foods', 'tables', 'used_tables'));
+        $orders = Order::all();
+
+        return view('home', compact('foods', 'orders', 'tables', 'used_tables'));
     }
 }

@@ -15,4 +15,9 @@ class Order extends Model
     {
         return $this->hasOne('App\Models\Table', 'id', 'table_id');
     }
+
+    public function waiter()
+    {
+        return $this->hasOne('App\User', 'id', 'waiter_id');
+    }
 }

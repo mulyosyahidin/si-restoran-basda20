@@ -39,7 +39,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('/orders/print/{order}', 'OrderController@print')->name('orders.print');
-    Route::resource('/orders', 'OrderController');
+    Route::get('/orders/queue', 'OrderController@queue')->name('orders.queue');
+    Route::get('/orders/ready', 'OrderController@ready')->name('orders.ready');
+    Route::get('/orders/finish', 'OrderController@finish')->name('orders.finish');
+    Route::resource('/orders', 'OrderController')->only(['index', 'show', 'destroy']);
     
     Route::get('/profile', 'ProfileController@index')->name('profile');
     Route::put('/profile', 'ProfileController@update')->name('profile.update');

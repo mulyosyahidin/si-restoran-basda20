@@ -8,8 +8,8 @@
       </div>
       <ul class="sidebar-menu">
           <li class="menu-header">SI Restoran</li>
-          <li class="nav-item">
-            <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+          <li class="nav-item {{ __active('HomeController', 'index') }}">
+            <a href="{{ route('home') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
           </li>
 
           @role('admin')
@@ -48,15 +48,16 @@
 
           @endrole
           @role('kitchen')
+          <li class="menu-header">Order</li>
+          <li class="{{ __active('OrderController', ['index', 'show']) }}"><a class="nav-link" href="{{ route('orders.index') }}"><i class="fas fa-table"></i> <span>Kelola Order</span></a></li>
+          <li class="{{ __active('OrderController', 'queue') }}"><a class="nav-link" href="{{ route('orders.queue') }}"><i class="fas fa-tasks"></i> <span>Dalam Antrian</span></a></li>
+          <li class="{{ __active('OrderController', 'ready') }}"><a class="nav-link" href="{{ route('orders.ready') }}"><i class="fas fa-chair"></i> <span>Order Siap</span></a></li>
+          <li class="{{ __active('OrderController', 'finish') }}"><a class="nav-link" href="{{ route('orders.finish') }}"><i class="fas fa-check"></i> <span>Order Selesai</span></a></li>
 
+          <li class="menu-header">Makanan</li>
+          <li class=" {{ __active('CategoryController', 'index') }}"><a class="nav-link" href="{{ route('admin.foods.stock') }}"><i class="fas fa-clipboard-check"></i> <span>Kelola Stok</span></a></li>
           @endrole
           
         </ul>
-
-        <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-          <a href="https://getstisla.com/docs" class="btn btn-primary btn-lg btn-block btn-icon-split">
-            <i class="fas fa-rocket"></i> Documentation
-          </a>
-        </div>
     </aside>
   </div>

@@ -251,7 +251,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="alert alert-info">Tidak ada order dalam antrian</div>
+                                        <div class="alert alert-info">Tidak ada order yang siap</div>
                                     </div>
                                 </div>
                             </div>
@@ -1138,6 +1138,35 @@
             `;
                         
             $('.ready-orders').append(newItem);
+        });
+
+        channel.bind('updateWaiterReadyOrder', function(data) {
+            let onProcess = data.on_process;
+            let ready = data.ready;
+            let order = data.order;
+
+            document.querySelector('.on-process-order-count').innerHTML = onProcess;
+            document.querySelector('.ready-order-count').innerHTML = ready;
+
+            Toastify({
+                text: `Order #${data.order.order_number} sudah dibayar`,
+                duration: 5000,
+                gravity: 'top',
+                position: 'left'
+            }).showToast();
+
+            let paySuccess = `<div class="card-body">
+                <div class="text-center">
+                    <i class="fa fa-2x fa-check"></i>
+                    <br>
+                    Order Sudah Dibayar!
+                </div>
+            </div>`;
+
+            $(`.ready-orders .ready-order-${order.id} .card`).empty().addClass('bg-success').append(paySuccess);
+            setTimeout(() => {
+                $(`.ready-orders .ready-order-${order.id}`).fadeOut('slow');
+            }, 5000);
         });
 
     </script>

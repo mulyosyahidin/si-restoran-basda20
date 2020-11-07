@@ -190,7 +190,23 @@ class OrderController extends Controller
                         'success' => true,
                         'message' => 'Order ditandai telah siap',
                         'orderCount' => $orderCount['on_process']
-            ]);
+                    ]);
+            break;
+            case 'do_payment' :
+                $order->status = 3;
+                $order->save();
+
+                $orderCount['on_process'] = Order::where('status', 1)->count();
+                $orderCount['ready'] = Order::where('status', 2)->count();
+                $orderCount['order'] = $order;
+
+                $this->pusher->trigger('restoran19', 'updateWaiterReadyOrder', $orderCount);
+
+                return response()
+                    ->json([
+                        'success' => true,
+                        'message' => 'Order ditandai telah siap'
+                    ]);
             break;
         }
     }
@@ -217,6 +233,30 @@ class OrderController extends Controller
             ->json([
                 'success' => true,
                 'message' => 'Berhasil melakukan pembayaran order'
+            ]);
+    }
+
+    public function find(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'order_number' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return response()
+                ->json([
+                    'error' => true,
+                    'validations' => $validator->errors()
+                ]);
+        }
+
+        $order_number = ltrim($request->order_number, '#');
+        $order = Order::where('order_number', $order_number)->first();
+
+        return response()
+            ->json([
+                'success' => ($order !== NULL),
+                'order' => $order
             ]);
     }
 }

@@ -204,7 +204,7 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="col-12">
+                            <div class="col-12 default-col">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="alert alert-info">Tidak ada order dalam antrian</div>
@@ -248,7 +248,7 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="col-12">
+                            <div class="col-12 default-col">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="alert alert-info">Tidak ada order yang siap</div>
@@ -856,6 +856,11 @@
                             </div>
                         `;
                         
+                        let defaultCol = $('.on-process-orders .default-col');
+                        if (defaultCol != null) {
+                            defaultCol.remove();
+                        }
+
                         $('.on-process-orders').append(newItem);
                     }
                 })
@@ -1035,11 +1040,15 @@
             let amount = $('.amount-input', $(this)).val();
             let orderId = __temp_order_id;
 
-            fetch(`{{ route('api.orders.payment', false) }}/${orderId}`, {
-                method: 'POST',
+            fetch(`{{ route('api.orders.update', false) }}/${orderId}`, {
+                method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
-                }
+                    'Authorization': 'Bearer '+ bearerToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    section: 'do_payment'
+                })
             })
                 .then(res => res.json())
                 .then(res => {
@@ -1136,7 +1145,11 @@
                                 </div>
                             </div>
             `;
-                        
+
+            let defaultCol = $('.ready-orders .default-col');
+            if (defaultCol != null) {
+                defaultCol.remove();
+            }
             $('.ready-orders').append(newItem);
         });
 

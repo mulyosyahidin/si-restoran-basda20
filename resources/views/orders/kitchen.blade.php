@@ -184,7 +184,7 @@
                                 </span>
                             </div>
                             <div class="col-5 text-right">
-                                <a href="#" class="btn btn-primary btn-sm btn-mark-ready" data-id="{${order.id}">Siap <i class="fa fa-arrow-right"></i></a>
+                                <a href="#" class="btn btn-primary btn-sm btn-mark-ready" data-id="${order.id}">Siap <i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>

@@ -24,9 +24,6 @@ Route::group(['middleware' => ['auth:api'], 'as' => 'api.'], function () {
     });
 
     Route::apiResource('foods', 'Api\FoodController')->only(['update', 'show']);
-
-    Route::post('/orders/payments/{order?}', 'Api\OrderController@make_payment')->name('orders.payment');
-
     Route::get('/orders/find', 'Api\OrderController@find')->name('orders.find');
     Route::apiResource('/orders', 'Api\OrderController');
 });

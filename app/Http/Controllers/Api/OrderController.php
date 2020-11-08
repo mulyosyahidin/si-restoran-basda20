@@ -205,7 +205,7 @@ class OrderController extends Controller
                 return response()
                     ->json([
                         'success' => true,
-                        'message' => 'Order ditandai telah siap'
+                        'message' => 'Order berhasil dibayar'
                     ]);
             break;
         }
@@ -220,20 +220,6 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
-    }
-
-    public function make_payment(Request $request, Order $order)
-    {
-        $order->status = 3;
-        $order->save();
-
-        Used_table::where('order_id', $order->id)->delete();
-
-        return response()
-            ->json([
-                'success' => true,
-                'message' => 'Berhasil melakukan pembayaran order'
-            ]);
     }
 
     public function find(Request $request)

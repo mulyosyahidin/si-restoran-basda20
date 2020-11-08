@@ -201,57 +201,6 @@
         })
     });
 
-    let readyBtn = document.querySelector('.btn-do-payment');
-    let alertContainer = document.querySelector('.alert-container');
-
-    readyBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        let orderId = __ready_order_id;
-
-        readyBtn.innerHTML = '<i class="fa fa-spin fa-spinner"></i> Memproses...';
-        readyBtn.setAttribute('disabled', 'disabled');
-        
-        fetch(`{{ route('api.orders.update', false) }}/${orderId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${passportAccessToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                section: 'mark_as_ready'
-            })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    readyBtn.innerHTML = '<i class="fa fa-check"></i> Berhasil!';
-                    alertContainer.innerHTML = 'Order ditandai sebagai disajikan';
-
-                    $(`.orders-list .order-${orderId}`).remove();
-
-                    setTimeout(() => {
-                        $('#payModal').modal('hide');
-                    }, 2500);
-
-                    if (res.orderCount == 0) {
-                        let blankOrder = `<div class="col-12 blank-order-container">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="alert alert-info">Tidak ada yang sedang menunggu antrian.</div>
-                                </div>
-                            </div>
-                        </div>`;
-                        document.querySelector('.orders-list')
-                            .innerHTML = blankOrder;
-                    }
-                }
-            })
-            .catch(errors => {
-                console.log(errors);
-            });
-    });
-
     $('#payModal').on('hidden.bs.modal', function (e) {
         readyBtn.removeAttribute('disabled');
         readyBtn.innerHTML = '<i class="fa fa-check"></i> Siap';
@@ -261,6 +210,8 @@
     let searchBtn = document.querySelector('.search-btn');
     let searchContainer = document.querySelector('.search-container');
     let tableContainer = document.querySelector('.table-container');
+    let payBtn = document.querySelector('.btn-do-payment');
+    let __order_id = 0;
 
     searchBtn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -285,6 +236,8 @@
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
+                    __order_id = res.order.id;
+
                     let tableInfo = `<div class="table-responsive">
                         <table class="table table-striped table-bordered">
                             <tr>
@@ -312,6 +265,7 @@
 
                     setTimeout(() => {
                         tableContainer.innerHTML = tableInfo;
+                        payBtn.removeAttribute('disabled');
                     }, 1200);
                 }
                 else {
@@ -323,6 +277,136 @@
             .catch(errors => {
                 console.log(errors);
             })
-    })
+    });
+
+    $('#payModalForm').on('hidden.bs.modal', function (e) {
+        $('#order-number').val('');
+
+        while (tableContainer.firstChild) {
+            tableContainer.removeChild(tableContainer.firstChild)
+        }
+        while (searchContainer.firstChild) {
+            searchContainer.removeChild(searchContainer.firstChild)
+        }
+
+        payBtn.setAttribute('disabled', 'disabled');
+        payBtn.innerHTML = 'Bayar';
+
+        __order_id = 0;
+    });
+
+    payBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        let id = __order_id;
+
+        payBtn.innerHTML = '<i class="fa fa-spin fa-spinner"></i> Memproses...';
+        payBtn.setAttribute('disabled', 'disabled');
+
+        fetch(`{{ route('api.orders.update', false) }}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${passportAccessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                section: 'do_payment'
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    payBtn.innerHTML = '<i class="fa fa-check"></i> Berhasil!';
+                    searchContainer.innerHTML = `<div class="alert alert-success">Berhasil melakukan pembayaran</div>`;
+
+                    setTimeout(() => {
+                        while (tableContainer.firstChild) {
+                            tableContainer.removeChild(tableContainer.firstChild)
+                        }
+                    }, 2000);
+
+                    $(`.orders-list .order-${id}`).fadeOut('slow');
+                }
+            })
+            .catch(errors => {
+                console.error(errors);
+            });
+    });
+
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            encrypted: true,
+            cluster: 'ap1'
+        });
+      
+        var channel = pusher.subscribe('restoran19');
+        channel.bind('updateWaiterOrderCount', function(data) {
+            let order = data.order;
+
+            Toastify({
+                text: `Order #${order.order_number} telah selesai dari dapur`,
+                duration: 5000,
+                gravity: 'top',
+                position: 'left'
+            }).showToast();
+
+            let newItem = `<div class="col-12 col-sm-6 col-md-6 col-lg-3 order-${order.id}">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="card-title">
+                                        <a href="{{ route('orders.show', false) }}/${order.id}" target="_blank">Order #${order.order_number}</a>
+                                    </h5>
+                                </div>
+                                <div class="col-7">
+                                    <span class="badge badge-danger">
+                                        ${order.update_time}
+                                    </span>
+                                </div>
+                                <div class="col-5 text-right">
+                                    <a href="#" class="btn btn-primary btn-sm btn-pay" data-order-number="${order.order_number}" data-id="${order.id}">Bayar <i class="fa fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-md table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>Pelanggan</td>
+                                        <td><strong>${order.customer_name}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Meja</td>
+                                        <td><strong>`;
+            if (order.table_id == null) {
+                newItem += 'Bawa Pulang';
+            }
+            else {
+                newItem += data.table.name;
+            }
+            newItem += `</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jumlah Item</td>
+                                        <td><strong>${order.total_item}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Harga</td>
+                                        <td><strong>Rp ${formatMoney(order.total_price)}</strong></td>
+                                    </tr>
+                                </tbody>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            let defaultCol = $('.orders-list .default-row');
+            if (defaultCol != null) {
+                defaultCol.remove();
+            }
+            $('.orders-list').append(newItem);
+        });
 </script>
 @endpush

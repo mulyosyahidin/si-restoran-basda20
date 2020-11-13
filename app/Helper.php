@@ -152,3 +152,20 @@ if ( ! function_exists('createOrderNumber'))
 
     }
 }
+
+if ( ! function_exists('getDay'))
+{
+    function getDay($day)
+    {
+        
+        $days['Sun'] = 'Minggu';
+        $days['Sat'] = 'Sabtu';
+        $days['Fri'] = 'Jum\'at';
+        $days['Thu'] = 'Kamis';
+        $days['Wed'] = 'Rabu';
+        $days['Tue'] = 'Selasa';
+        $days['Mon'] = 'Senin';
+
+        return $days[$day];
+    }
+}

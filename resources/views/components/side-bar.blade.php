@@ -19,7 +19,7 @@
             <ul class="dropdown-menu">
               <li class=" {{ __active('FoodController', ['index', 'edit', 'show']) }}"><a class="nav-link" href="{{ route('admin.foods.index') }}">Kelola Makanan</a></li>
               <li class=" {{ __active('FoodController', 'create') }}"><a class="nav-link" href="{{ route('admin.foods.create') }}">Tambah Makanan</a></li>
-              <li class=" {{ __active('FoodController', 'stock') }}"><a class="nav-link" href="{{ route('admin.foods.stock') }}">Kelola Stok</a></li>
+              <li class=" {{ __active('FoodController', 'stock') }}"><a class="nav-link" href="{{ route('foods.stock') }}">Kelola Stok</a></li>
             </ul>
           </li>
           <li class=" {{ __active('CategoryController', 'index') }}"><a class="nav-link" href="{{ route('admin.categories') }}"><i class="fas fa-list"></i> <span>Kelola Kategori</span></a></li>
@@ -33,7 +33,7 @@
 
           @role('kitchen')
           <li class="menu-header">Makanan</li>
-          <li class=" {{ __active('CategoryController', 'index') }}"><a class="nav-link" href="{{ route('admin.foods.stock') }}"><i class="fas fa-clipboard-check"></i> <span>Kelola Stok</span></a></li>
+          <li class=" {{ __active('CategoryController', 'index') }}"><a class="nav-link" href="{{ route('foods.stock') }}"><i class="fas fa-clipboard-check"></i> <span>Kelola Stok</span></a></li>
           @endrole
           
           @role('admin')

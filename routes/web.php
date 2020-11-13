@@ -34,9 +34,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('/tables', 'TableController')->only(['index', 'show', 'destroy', 'create', 'store']);
         Route::get('/categories', 'CategoryController@index')->name('categories');
 
-        Route::get('/foods/stock', 'FoodController@stock')->name('foods.stock');
         Route::resource('/foods', 'FoodController');
     });
+
+    Route::get('/foods-stock', 'FoodController@stock')->name('foods.stock');
 
     Route::get('/orders/print/{order}', 'OrderController@print')->name('orders.print');
     Route::get('/orders/queue', 'OrderController@queue')->name('orders.queue');

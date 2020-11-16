@@ -26,6 +26,8 @@ Route::group(['middleware' => ['auth:web', 'auth:api']], function () {
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/foods/stock', 'FoodController@stock')->name('foods.stock');
+    
     Route::group(['middleware' => ['role:admin'], 'as' => 'admin.'], function() {
         Route::get('/settings', 'SettingController@index')->name('settings');
         Route::put('/settings', 'SettingController@update')->name('settings.update');
@@ -36,8 +38,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('/foods', 'FoodController');
     });
-
-    Route::get('/foods-stock', 'FoodController@stock')->name('foods.stock');
 
     Route::get('/orders/print/{order}', 'OrderController@print')->name('orders.print');
     Route::get('/orders/queue', 'OrderController@queue')->name('orders.queue');

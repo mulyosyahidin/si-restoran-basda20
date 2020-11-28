@@ -84,7 +84,7 @@
                                 <div class="card-body">
                                     <div class="row foods">
                                         @foreach ($foods as $item)
-                                            <div class="col-2">
+                                            <div class="col col-md-2">
                                                 <div class="item item-{{ $item->id }}" data-id="{{ $item->id }}">
                                                     <img src="{{ $item->media[0]->getFullUrl() }}" alt="" class="img-fluid img-w30">
                                                     <div>{{ $item->name }}</div>
@@ -109,7 +109,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="customer-name">Nama pelanggan:</label>
                                                 <input type="text" id="customer-name" class="form-control customer_name-input">
@@ -117,7 +117,7 @@
                                                 <div class="invalid-feedback customer_name-feedback">Nama pelanggan tidak boleh kosong</div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="order-type">Order:</label>
                                                 <select id="order-type" class="form-control">

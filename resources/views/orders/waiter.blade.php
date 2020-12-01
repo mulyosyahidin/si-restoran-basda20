@@ -58,7 +58,7 @@
                                 <li class="nav-item">
                                     <a href="#on-process" data-toggle="tab" id="on-process-tab" class="nav-link">
                                         Order Dalam Antrian
-                                        <span style="display: inline !important" class="badge badge-pill badge-warning on-process-order-count">{{ $orderCount['on_process'] }}</span>
+                                        <span style="display: inline !important" class="badge badge-pill badge-warning on-process-order-count">{{ $orderCount['onProcess'] }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -1083,7 +1083,7 @@
       
         var channel = pusher.subscribe('restoran19');
         channel.bind('updateWaiterOrderCount', function(data) {
-            let onProcess = data.on_process;
+            let onProcess = data.onProcess;
             let ready = data.ready;
 
             document.querySelector('.on-process-order-count').innerHTML = onProcess;
@@ -1154,7 +1154,7 @@
         });
 
         channel.bind('updateWaiterReadyOrder', function(data) {
-            let onProcess = data.on_process;
+            let onProcess = data.onProcess;
             let ready = data.ready;
             let order = data.order;
 

@@ -42,19 +42,20 @@ class HomeController extends Controller
         $orders = Order::where('status', 1)->get();
         $readyOrders = Order::where('status', 2)->get();
 
-        $orderCount['on_process'] = Order::where('status', 1)->count();
+        $orderCount['onProcess'] = Order::where('status', 1)->count();
         $orderCount['ready'] = Order::where('status', 2)->count();
 
         $stats['foods'] = Food::count();
         $stats['orders'] = Order::count();
         $stats['income'] = Order::income();
-        $stats['today_order'] = Order::whereDate('created_at', Carbon::today())->count();
-        $stats['today_income'] = Order::where('status', 3)->whereDate('created_at', Carbon::today())->sum('total_price');
-        $stats['week_order'] = Order::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
-        $stats['week_income'] = Order::where('status', 3)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('total_price');
-        $stats['order_stats'] = Order::weekStats();
+        $stats['todayIncome'] = Order::todayIncome();
+        $stats['todayOrder'] = Order::whereDate('created_at', Carbon::today())->count();
+        $stats['todayIncome'] = Order::where('status', 3)->whereDate('created_at', Carbon::today())->sum('total_price');
+        $stats['weekOrder'] = Order::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        $stats['weekIncome'] = Order::where('status', 3)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('total_price');
+        $stats['orderStats'] = Order::weekStats();
 
-        $stats['most_products'] = Order_item::select(DB::raw('food_id, count(food_id) as order_count'))->groupBy('food_id')->orderBy('order_count', 'desc')->take(10)->get();
+        $stats['mostProducts'] = Order_item::select(DB::raw('food_id, count(food_id) as order_count'))->groupBy('food_id')->orderBy('order_count', 'desc')->take(10)->get();
 
         return view('home', compact('foods', 'orderCount', 'orders', 'readyOrders', 'tables', 'used_tables', 'stats'));
     }

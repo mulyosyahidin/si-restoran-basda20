@@ -46,10 +46,10 @@
           </div>
           <div class="card-wrap">
             <div class="card-header">
-              <h4>Pendapatan</h4>
+              <h4>Pendapatan Hari Ini</h4>
             </div>
             <div class="card-body">
-              Rp {{ number_format($stats['income'], 2, ',', '.') }}
+              Rp {{ number_format($stats['todayIncome'], 2, ',', '.') }}
             </div>
           </div>
         </div>
@@ -61,10 +61,10 @@
           </div>
           <div class="card-wrap">
             <div class="card-header">
-              <h4>Pelanggan</h4>
+              <h4>Total Pendapatan</h4>
             </div>
             <div class="card-body">
-              0
+              Rp {{ number_format($stats['income'], 2, ',', '.') }}
             </div>
           </div>
         </div>
@@ -80,19 +80,19 @@
             <canvas id="orderStats" height="182"></canvas>
             <div class="statistic-details mt-sm-4">
               <div class="statistic-details-item">
-                <div class="detail-value">{{ $stats['today_order'] }}</div>
+                <div class="detail-value">{{ $stats['todayOrder'] }}</div>
                 <div class="detail-name">Order Hari Ini</div>
               </div>
               <div class="statistic-details-item">
-                <div class="detail-value">Rp {{ number_format($stats['today_income'], 2, ',', '.') }}</div>
+                <div class="detail-value">Rp {{ number_format($stats['todayIncome'], 2, ',', '.') }}</div>
                 <div class="detail-name">Pendapatan Hari Ini</div>
               </div>
               <div class="statistic-details-item">
-                <div class="detail-value">{{ $stats['week_order'] }}</div>
+                <div class="detail-value">{{ $stats['weekOrder'] }}</div>
                 <div class="detail-name">Order Minggu Ini</div>
               </div>
               <div class="statistic-details-item">
-                <div class="detail-value">Rp {{ number_format($stats['week_income'], 2, ',', '.') }}</div>
+                <div class="detail-value">Rp {{ number_format($stats['weekIncome'], 2, ',', '.') }}</div>
                 <div class="detail-name">Pendapatan Minggu Ini</div>
               </div>
             </div>
@@ -105,8 +105,8 @@
             <h4>Paling Banyak di Order</h4>
           </div>
           <div class="card-body">
-            @if (count($stats['most_products']) > 0)
-              @foreach ($stats['most_products'] as $item)
+            @if (count($stats['mostProducts']) > 0)
+              @foreach ($stats['mostProducts'] as $item)
               <ul class="list-unstyled list-unstyled-border">
                 <li class="media">
                   <img class="mr-3 rounded-circle" width="50" src="{{ $item->food->media[0]->getFullUrl() }}" alt="avatar">
@@ -152,7 +152,7 @@
         datasets: [{
           label: 'Order',
           data: [
-            @foreach ($stats['order_stats'] as $key => $count)
+            @foreach ($stats['orderStats'] as $key => $count)
               {{ $count }},
             @endforeach
           ],

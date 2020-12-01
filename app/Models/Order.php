@@ -60,4 +60,9 @@ class Order extends Model
         
     }
 
+    public static function todayIncome() 
+    {
+        return self::where(['status' => 3, 'created_at' => Carbon::today()])->sum('total_price');
+    }
+
 }

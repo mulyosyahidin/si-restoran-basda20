@@ -178,7 +178,7 @@ class OrderController extends Controller
 
                 $order->update_time = Carbon::parse($order->updated_at)->format('H:i');
 
-                $orderCount['on_process'] = Order::where('status', 1)->count();
+                $orderCount['onProcess'] = Order::where('status', 1)->count();
                 $orderCount['ready'] = Order::where('status', 2)->count();
                 $orderCount['order'] = $order;
                 $orderCount['table'] = $order->table;
@@ -189,14 +189,14 @@ class OrderController extends Controller
                     ->json([
                         'success' => true,
                         'message' => 'Order ditandai telah siap',
-                        'orderCount' => $orderCount['on_process']
+                        'orderCount' => $orderCount['onProcess']
                     ]);
             break;
             case 'do_payment' :
                 $order->status = 3;
                 $order->save();
 
-                $orderCount['on_process'] = Order::where('status', 1)->count();
+                $orderCount['onProcess'] = Order::where('status', 1)->count();
                 $orderCount['ready'] = Order::where('status', 2)->count();
                 $orderCount['order'] = $order;
 

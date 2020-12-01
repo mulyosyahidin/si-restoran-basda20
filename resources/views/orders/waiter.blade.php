@@ -460,12 +460,22 @@
             $('#place-new-order2').html('Bayar dan Selesai');
         }
 
+        function inArray(needle, haystack) {
+            var length = haystack.length;
+            for (var i = 0; i < length; i++) {
+                if (haystack[i] == needle)
+                    return true;
+            }
+
+            return false;
+        }
+
         let bearerToken = localStorage.getItem('accessToken');
         document.querySelector('body')
             .classList.add('sidebar-mini');
 
         $(document).ready(function () {
-            $('#table-select').select2();
+            //$('#table-select').select2();
         });
 
         let addCartForm = $('#add-cart-form');
@@ -809,11 +819,21 @@
                         $('.btn-print').attr('href', `{{ route('orders.print', false) }}/${res.order.id}`);
 
                         let usedTables = res.used_tables;
-                        $('#table-select option').removeAttr('disabled');
+                        let allTables = res.all_table;
 
-                        usedTables.forEach((table) => {
-                            $(`#table-select .table-${table.table_id}`).attr('disabled', 'disabled');
-                        })
+                        $('#table-select').empty();
+                        $.each(allTables, function(key, table) {
+                            let tableOption = '';
+
+                            if (inArray(table.id, usedTables)) {
+                                tableOption = $(`<option value="${table.id}" disabled>${table.name}</option>`)
+                            }
+                            else {
+                                tableOption = $(`<option value="${table.id}">${table.name}</option>`)
+                            }
+
+                            $('#table-select').append(tableOption)
+                        });
 
                         orderModal.modal('show');
 
@@ -862,6 +882,10 @@
                         }
 
                         $('.on-process-orders').append(newItem);
+                        let selects = document.querySelector('#table-select');
+                        for (let i = 0; i < selects.length; i++) {
+                            selects[i].selectedIndex = -1;
+                        }
                     }
                 })
                 .catch(errors => {
@@ -949,6 +973,23 @@
                         $('.btn-print').attr('href', `{{ route('orders.print', false) }}/${res.order.id}`);
                         $('.amount-input').data('total-payment', res.order.total_price);
 
+                        let usedTables = res.used_tables;
+                        let allTables = res.all_table;
+                        
+                        $('#table-select').empty();
+                        $.each(allTables, function(key, table) {
+                            let tableOption = '';
+
+                            if (inArray(table.id, usedTables)) {
+                                tableOption = $(`<option value="${table.id}" disabled>${table.name}</option>`)
+                            }
+                            else {
+                                tableOption = $(`<option value="${table.id}">${table.name}</option>`)
+                            }
+
+                            $('#table-select').append(tableOption)
+                        });
+
                         orderModal.modal('show');
 
                         let processOrderCount = +$('.on-process-order-count').text();
@@ -991,6 +1032,10 @@
                         `;
                         
                         $('.on-process-orders').append(newItem);
+                        let selects = document.querySelector('#table-select');
+                        for (let i = 0; i < selects.length; i++) {
+                            selects[i].selectedIndex = -1;
+                        }
                     }
                 })
                 .catch(errors => {
@@ -1157,7 +1202,7 @@
             let onProcess = data.onProcess;
             let ready = data.ready;
             let order = data.order;
-
+            
             document.querySelector('.on-process-order-count').innerHTML = onProcess;
             document.querySelector('.ready-order-count').innerHTML = ready;
 
@@ -1180,6 +1225,20 @@
             setTimeout(() => {
                 $(`.ready-orders .ready-order-${order.id}`).fadeOut('slow');
             }, 5000);
+
+            $('#table-select').empty();
+            $.each(data.allTables, function(key, table) {
+                let tableOption = '';
+
+                if (inArray(table.id, data.usedTables)) {
+                    tableOption = $(`<option value="${table.id}" disabled>${table.name}</option>`)
+                }
+                else {
+                    tableOption = $(`<option value="${table.id}">${table.name}</option>`)
+                }
+
+                $('#table-select').append(tableOption)
+            });
         });
 
     </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\Table;
 use App\Models\Used_table;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -120,6 +121,13 @@ class OrderController extends Controller
         $order->time = Carbon::parse($order->created_at)->format('H:i');
         $order->time_update = Carbon::parse($order->updated_at)->format('H:i');
 
+        $usedTablesGet = Used_table::join('orders', 'orders.id', 'used_tables.order_id')->where('orders.status', 1)->get();
+        $usedTables = [];
+
+        foreach ($usedTablesGet as $table) {
+            $usedTables[] = $table->table_id;
+        }
+
         $notify = array(
             'order' => $order,
             'items' => $orderItems,
@@ -134,7 +142,8 @@ class OrderController extends Controller
                 'message' => 'Berhasil membuat order',
                 'order' => $order,
                 'table' => $order->table,
-                'used_tables' => Used_table::all()
+                'all_table' => Table::all(),
+                'used_tables' => $usedTables
             ]);
     }
 
@@ -199,6 +208,17 @@ class OrderController extends Controller
                 $orderCount['onProcess'] = Order::where('status', 1)->count();
                 $orderCount['ready'] = Order::where('status', 2)->count();
                 $orderCount['order'] = $order;
+
+                $usedTables = Used_table::join('orders', 'orders.id', 'used_tables.order_id')->where('orders.status', 1)->get();
+                $orderCount['allTables'] = Table::all();
+
+                $used_tables = [];
+
+                foreach ($usedTables as $table) {
+                    $used_tables[] = $table->table_id;
+                }
+
+                $orderCount['usedTables'] = $used_tables;
 
                 $this->pusher->trigger('restoran19', 'updateWaiterReadyOrder', $orderCount);
 

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>Print Nota Order #{{ $order->order_number }}</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
     <style>
         body {
@@ -51,7 +51,6 @@
                     <div class="text-center">
                         <h1>Order #{{ $order->order_number }}</h1>
                     </div>
-                    </span>
                     <table class="table table-hover">
                         <thead>
                             <tr>

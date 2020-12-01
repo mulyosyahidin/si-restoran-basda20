@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
         $foods = Food::all();
         $tables = Table::all();
-        $used_tables_get = Used_table::all();
+        $used_tables_get = Used_table::join('orders', 'orders.id', 'used_tables.order_id')->where('orders.status', 1)->get();
         $used_tables = [];
 
         foreach ($used_tables_get as $table) {

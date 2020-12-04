@@ -416,7 +416,7 @@
             return false;
         }
 
-        let bearerToken = localStorage.getItem('accessToken');
+        let passportAccessToken = localStorage.getItem('accessToken');
         document.querySelector('body')
             .classList.add('sidebar-mini');
 
@@ -445,7 +445,7 @@
                 fetch(`{{ route('api.foods.show', false) }}/${id}`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer '+ bearerToken
+                        'Authorization': 'Bearer '+ passportAccessToken
                     }
                 })
                     .then(res => res.json())
@@ -532,7 +532,7 @@
             fetch(`{{ route('api.foods.show', false) }}/${id}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 }
             })
                 .then(res => res.json())
@@ -719,7 +719,7 @@
             fetch(`{{ route('api.orders.store') }}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken,
+                    'Authorization': 'Bearer '+ passportAccessToken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -887,7 +887,7 @@
             fetch(`{{ route('api.orders.update', false) }}/${orderId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken,
+                    'Authorization': 'Bearer '+ passportAccessToken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

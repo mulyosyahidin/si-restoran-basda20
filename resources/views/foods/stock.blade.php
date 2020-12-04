@@ -88,7 +88,6 @@
     <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <script>
-        let bearerToken = localStorage.getItem('accessToken');
         $('#stock-table').dataTable();
         
         let saveBtn = document.querySelectorAll('.save-btn');
@@ -103,7 +102,7 @@
                 fetch(`{{ route('api.foods.update', false) }}/${id}`, {
                     method: 'PUT',
                     headers: {
-                        'Authorization': 'Bearer '+ bearerToken,
+                        'Authorization': 'Bearer '+ passportAccessToken,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -143,7 +142,7 @@
             fetch(`{{ route('api.foods.stock') }}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 },
                 body: stockData
             })

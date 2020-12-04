@@ -172,8 +172,6 @@
     <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <script>
-        let bearerToken = localStorage.getItem('accessToken');
-
         $('.add-modal-btn').click(function (e) {
             $('#addModal').modal({
                 backdrop: 'static',
@@ -185,7 +183,7 @@
             ajax: {
                 url: '{{ route('api.categories.index') }}',
                 headers: {
-                    "Authorization": "Bearer "+ bearerToken
+                    "Authorization": "Bearer "+ passportAccessToken
                 }
             },
             columns: [
@@ -235,7 +233,7 @@
             fetch('{{ route('api.categories.store') }}', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 },
                 body: formData
             })
@@ -319,7 +317,7 @@
 
             fetch(`{{ route('api.categories.show', false) }}/${id}`, {
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 }
             })
                 .then(res => res.json())
@@ -363,7 +361,7 @@
             fetch('{{ route('api.categories.update', false) }}/'+ editKategoriId, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 },
                 body: formData
             })
@@ -425,7 +423,7 @@
             fetch(`{{ route('api.categories.destroy', false) }}/${deleteKategoriId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 }
             })
                 .then(res => res.json())

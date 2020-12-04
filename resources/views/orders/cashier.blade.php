@@ -134,8 +134,6 @@
 <script src="{{ asset('assets/plugins/accounting.js/accounting.min.js') }}"></script>
 
 <script>
-    let passportAccessToken = localStorage.getItem('accessToken');
-
     function formatMoney(money) {
         return accounting.formatMoney(money, '', 2, '.', ',');
     }

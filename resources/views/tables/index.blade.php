@@ -23,7 +23,7 @@
                     <div class="col-12 col-sm-6 col-md-6 col-lg-3 table-{{ $item->id }}">
                         <article class="article article-style-b">
                             <div class="article-header">
-                                <div class="article-image table-picture" data-background="{{ $item->media[0]->getFullUrl() }}">
+                                <div class="article-image table-picture" data-background="@if (isset($item->media[0])){{ $item->media[0]->getFullUrl() }}@else{{ asset('assets/uploads/images/meja.webp') }}@endif">
                                 </div>
                                 <div class="article-badge">
                                     <div class="article-badge-item bg-info"><i class="fas fa-chair"></i> <span class="table-seat_number">{{ $item->seat_number }}</span> Kursi</div>
@@ -140,8 +140,6 @@
 
 @push('custom_js')
     <script>
-        let bearerToken = localStorage.getItem('accessToken');
-
         let deleteLink = document.querySelectorAll('.delete-table-link');
         let deleteTableId = 0;
 
@@ -169,7 +167,7 @@
             fetch('{{ route('api.tables.destroy', false) }}/'+ deleteTableId, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 }
             })
                 .then(res => res.json())
@@ -216,7 +214,7 @@
 
                 fetch(`{{ route('api.tables.show', false) }}/${id}`, {
                     headers: {
-                        'Authorization': 'Bearer '+ bearerToken
+                        'Authorization': 'Bearer '+ passportAccessToken
                     }
                 })
                     .then(res => res.json())
@@ -262,7 +260,7 @@
             fetch('{{ route('api.tables.update', false) }}/'+ editTableId, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 },
                 body: formData
             })

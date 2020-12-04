@@ -175,8 +175,6 @@
 
 @push('custom_js')
     <script>
-        let bearerToken = localStorage.getItem('accessToken');
-
         let editTableLink = document.querySelectorAll('.edit-table-link');
         let editTableId = 0;
         let editTableForm = document.querySelector('#edit-table-form');
@@ -190,7 +188,7 @@
 
                 fetch(`{{ route('api.tables.show', false) }}/${id}`, {
                     headers: {
-                        'Authorization': 'Bearer '+ bearerToken
+                        'Authorization': 'Bearer '+ passportAccessToken
                     }
                 })
                     .then(res => res.json())
@@ -236,7 +234,7 @@
             fetch('{{ route('api.tables.update', $table->id) }}', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 },
                 body: formData
             })

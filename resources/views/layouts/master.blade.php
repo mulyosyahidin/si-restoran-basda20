@@ -50,6 +50,8 @@
 
   <script>
     let logOutBtn = document.querySelector('.logout-btn');
+    let passportAccessToken = localStorage.getItem('accessToken');
+    
     logOutBtn.addEventListener('click', (e) => {
       e.preventDefault();
 
@@ -57,7 +59,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer '+ localStorage.getItem('accessToken')
+          'Authorization': 'Bearer '+ passportAccessToken
         },
         body: JSON.stringify({
           _token: '{{ csrf_token() }}'

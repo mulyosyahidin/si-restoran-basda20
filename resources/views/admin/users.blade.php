@@ -202,7 +202,7 @@
     <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <script>
-        let bearerToken = localStorage.getItem('accessToken');
+        let passportAccessToken = localStorage.getItem('accessToken');
 
         $('.add-modal-btn').click(function (e) {
             $('#addModal').modal({
@@ -215,7 +215,7 @@
             ajax: {
                 url: '{{ route('api.users.index') }}',
                 headers: {
-                    "Authorization": "Bearer "+ bearerToken
+                    "Authorization": "Bearer "+ passportAccessToken
                 }
             },
             columns: [
@@ -261,7 +261,7 @@
             fetch('{{ route('api.users.store') }}', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 },
                 body: formData
             })
@@ -343,7 +343,7 @@
 
             fetch(`{{ route('api.users.show', false) }}/${id}`, {
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 }
             })
                 .then(res => res.json())
@@ -380,7 +380,7 @@
             fetch('{{ route('api.users.update', false) }}/'+ editUserId, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken,
+                    'Authorization': 'Bearer '+ passportAccessToken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -451,7 +451,7 @@
             fetch(`{{ route('api.users.destroy', false) }}/${deleteUserId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': 'Bearer '+ bearerToken
+                    'Authorization': 'Bearer '+ passportAccessToken
                 }
             })
                 .then(res => res.json())

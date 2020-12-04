@@ -136,7 +136,6 @@
 <script src="{{ asset('assets/plugins/toastify-js/src/toastify.js') }}"></script>
 
 <script>
-    let passportAccessToken = localStorage.getItem('accessToken');
     var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
         encrypted: true,
         cluster: 'ap1'

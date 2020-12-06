@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/categories', 'CategoryController@index')->name('categories');
 
         Route::resource('/foods', 'FoodController');
+        Route::get('/report', 'ReportController@index')->name('report');
     });
 
     Route::get('/orders/print/{order}', 'OrderController@print')->name('orders.print');

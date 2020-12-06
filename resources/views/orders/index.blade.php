@@ -46,7 +46,7 @@
                                     @foreach ($orders as $item)
                                     <tr>
                                         <th scope="col"><a href="{{ route('orders.show', $item->id) }}">#{{ $item->order_number }}</a></th>
-                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('l, d M Y H:i') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->isoFormat('dddd, DD MMM YYYY HH:mm') }}</td>
                                         <td>
                                             @if ($item->type == 1)
                                                 Makan ditempat @if ($item->table_id != null) / {{ $item->table->name }} @endif

@@ -35,7 +35,7 @@
                                 <tr>
                                     <td>Tanggal</td>
                                     <td>
-                                        <strong>{{ \Carbon\Carbon::parse($order->created_at)->format('l, d M Y H:i') }}</strong>
+                                        <strong>{{ \Carbon\Carbon::parse($order->created_at)->isoFormat('dddd, DD MMMM YYYY HH:mm') }}</strong>
                                     </td>
                                 </tr>
                                 <tr>

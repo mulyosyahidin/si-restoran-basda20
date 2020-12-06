@@ -47,7 +47,7 @@
                                     </tr>
                                     <tr>
                                         <td>Harga</td>
-                                        <td><span class="font-weight-bold">Rp {{ $food->price }}</span></td>
+                                        <td><span class="font-weight-bold">Rp {{ number_format($food->price, 2, ',', '.') }}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Kategori</td>

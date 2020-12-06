@@ -11,8 +11,11 @@
           <li class="nav-item {{ __active('HomeController', 'index') }}">
             <a href="{{ route('home') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
           </li>
-
           @role('admin')
+          <li class="nav-item {{ __active('ReportController', 'index') }}">
+            <a href="{{ route('admin.report') }}" class="nav-link"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+          </li>
+
           <li class="menu-header">Makanan</li>
           <li class="nav-item dropdown {{ __active('FoodController', ['index', 'edit', 'create', 'show', 'stock']) }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-hamburger"></i><span>Kelola Makanan</span></a>

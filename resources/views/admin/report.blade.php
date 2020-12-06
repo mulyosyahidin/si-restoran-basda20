@@ -31,6 +31,21 @@
         </div>
       </div>
 
+      @if (count($reports) > 0)
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="text-right">
+            Download:
+            @if ($filter < 7)
+              <a href="{{ route('admin.report.export', $filter) }}">Excel</a>
+            @else
+            <a href="{{ route('admin.report.export', ['filter' => $filter, 'date' => $getDate]) }}">Excel</a>
+            @endif
+          </div>
+        </div>
+      </div>
+      @endif
+
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
           <div class="card card-statistic-1">

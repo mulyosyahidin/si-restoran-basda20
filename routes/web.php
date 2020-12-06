@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('/foods', 'FoodController');
         Route::get('/report', 'ReportController@index')->name('report');
+        Route::get('/report/export/{filter}/{date?}', 'ReportController@export')->name('report.export');
     });
 
     Route::get('/orders/print/{order}', 'OrderController@print')->name('orders.print');

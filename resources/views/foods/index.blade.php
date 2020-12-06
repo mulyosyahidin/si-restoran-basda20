@@ -23,7 +23,7 @@
                     <div class="col-12 col-sm-6 col-md-6 col-lg-3 table-{{ $item->id }}">
                         <article class="article article-style-b">
                             <div class="article-header">
-                                <div class="article-image table-picture" data-background="@if (isset($item->media[0])) {{ $item->media[0]->getFullUrl() }} @endif">
+                                <div class="article-image table-picture" data-background="@if (isset($item->media[0])){{ $item->media[0]->getFullUrl() }}@endif">
                                 </div>
                                 <div class="article-badge">
                                     <div class="article-badge-item bg-info"><span class="table-seat_number">Stok: {{ $item->stock }}</span></div>

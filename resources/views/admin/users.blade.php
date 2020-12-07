@@ -202,8 +202,6 @@
     <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <script>
-        let passportAccessToken = localStorage.getItem('accessToken');
-
         $('.add-modal-btn').click(function (e) {
             $('#addModal').modal({
                 backdrop: 'static',

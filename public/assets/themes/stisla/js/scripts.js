@@ -19,7 +19,7 @@ if(window.Chart) {
   Chart.defaults.global.tooltips.mode = 'nearest';
 }
 
-// DropzoneJS
+// DropzoneJSa
 if(window.Dropzone) {
   Dropzone.autoDiscover = false;
 }

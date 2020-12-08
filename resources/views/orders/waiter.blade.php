@@ -416,7 +416,6 @@
             return false;
         }
 
-        let passportAccessToken = localStorage.getItem('accessToken');
         document.querySelector('body')
             .classList.add('sidebar-mini');
 
@@ -919,7 +918,6 @@
             }
         });
 
-        let passportAccessToken = localStorage.getItem('accessToken');
         var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
             encrypted: true,
             cluster: 'ap1'

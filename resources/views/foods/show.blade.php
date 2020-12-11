@@ -22,7 +22,7 @@
             @endif
 
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -67,16 +67,8 @@
                             </div>
                         </div>
                         <div class="card-footer text-right">
-                            <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#stockModal"><i class="fas fa-clipboard-check"></i></a>
                             <a href="{{ route('admin.foods.edit', $food->id) }}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                             <a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Riwayat Order</h5>
                         </div>
                     </div>
                 </div>
